@@ -1,0 +1,49 @@
+# Relationship SPARQL queries
+
+PREFIX kb: <http://example.org/kb/vocab#>
+PREFIX rel: <http://purl.org/vocab/relationship/>
+
+# 1. Direct relationships for a person
+SELECT ?other ?strength ?lastMeeting WHERE {
+    GRAPH :inferred {
+        :person/John_Smith kb:hasRelationship ?rel .
+        ?rel kb:withPerson ?other ;
+             kb:relationshipStrength ?strength ;
+             kb:lastInteraction ?lastMeeting .
+    }
+} ORDER BY DESC(?strength)
+
+# 2. Stale relationships (no contact in 6 months)
+SELECT ?person1 ?person2 ?lastDate WHERE {
+    GRAPH :inferred {
+        ?person1 kb:hasRelationship ?rel .
+        ?rel kb:withPerson ?person2 ;
+             kb:isStale true ;
+             kb:lastInteraction ?lastDate .
+    }
+} ORDER BY ?lastDate
+
+# 3. Meeting frequency between people
+SELECT ?person ?meetings WHERE {
+    GRAPH :inferred {
+        :person/John_Smith kb:hasRelationship ?rel .
+        ?rel kb:withPerson ?person ;
+             kb:meetingCount ?meetings .
+        FILTER(?meetings > 10)
+    }
+} ORDER BY DESC(?meetings)
+
+# 4. Find teams (people who meet together)
+SELECT ?p1 ?p2 ?p3 (COUNT(?meeting) as ?shared) WHERE {
+    ?meeting kb:hasAttendee ?p1, ?p2, ?p3 .
+    FILTER(?p1 < ?p2 && ?p2 < ?p3)
+} GROUP BY ?p1 ?p2 ?p3
+HAVING(?shared > 3)
+ORDER BY DESC(?shared)
+
+# 5. Professional network
+SELECT DISTINCT ?colleague WHERE {
+    :person/Me rel:worksWith ?directColleague .
+    ?directColleague rel:worksWith ?colleague .
+    FILTER(?colleague != :person/Me)
+}

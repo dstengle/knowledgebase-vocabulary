@@ -1,0 +1,55 @@
+@prefix : <http://example.org/kb/> .
+@prefix kb: <http://example.org/kb/vocab#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+# Daily Note Example
+:timeline/2024/11/15/daily a kb:DailyNote ;
+    kb:filePath "timeline/2024/11/15/daily.md" ;
+    dcterms:title "Thursday, November 15, 2024" ;
+    dcterms:created "2024-11-15T08:30:00"^^xsd:dateTime ;
+    kb:documentType "daily-note" ;
+    kb:hasTag :tag/bydate/2024/11/15 ,
+              :tag/byweek/2024/46/Thu ;
+    kb:hasSection :timeline/2024/11/15/daily#Morning_Thoughts ,
+                  :timeline/2024/11/15/daily#Meetings ,
+                  :timeline/2024/11/15/daily#Todos .
+
+# Sections
+:timeline/2024/11/15/daily#Morning_Thoughts a kb:Section ;
+    kb:heading "Morning Thoughts" ;
+    kb:headingLevel 2 ;
+    kb:contains :timeline/2024/11/15/daily#Morning_Thoughts/link/Coffee_Project .
+
+:timeline/2024/11/15/daily#Meetings a kb:Section ;
+    kb:heading "Meetings" ;
+    kb:headingLevel 2 ;
+    kb:contains :timeline/2024/11/15/daily#Meetings/link/Team_Standup ,
+                :timeline/2024/11/15/daily#Meetings/link/Sarah_Chen .
+
+:timeline/2024/11/15/daily#Todos a kb:Section ;
+    kb:heading "Todos" ;
+    kb:headingLevel 2 ;
+    kb:contains :timeline/2024/11/15/daily#Todos/todo/Review_PR ,
+                :timeline/2024/11/15/daily#Todos/todo/Email_John .
+
+# Links
+:timeline/2024/11/15/daily#Meetings/link/Team_Standup a kb:WikiLink ;
+    kb:target :timeline/2024/11/15/team-standup ;
+    kb:linkText "[[Team Standup]]" ;
+    kb:surroundingText "9am [[Team Standup]] - discuss sprint progress" .
+
+:timeline/2024/11/15/daily#Meetings/link/Sarah_Chen a kb:WikiLink ;
+    kb:target :person/Sarah_Chen ;
+    kb:linkText "[[Sarah Chen]]" ;
+    kb:surroundingText "2pm 1:1 with [[Sarah Chen]]" .
+
+# Todos
+:timeline/2024/11/15/daily#Todos/todo/Review_PR a kb:TodoItem ;
+    kb:rawText "- [ ] Review [[Sarah Chen]]'s PR for auth module" ;
+    kb:isCompleted false ;
+    kb:contains :timeline/2024/11/15/daily#Todos/todo/Review_PR/link/Sarah_Chen .
+
+:timeline/2024/11/15/daily#Todos/todo/Email_John a kb:TodoItem ;
+    kb:rawText "- [x] Email [[John Smith]] about Q4 planning [[due:: 2024-11-15]]" ;
+    kb:isCompleted true .

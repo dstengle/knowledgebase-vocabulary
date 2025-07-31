@@ -1,0 +1,40 @@
+@prefix : <http://example.org/kb/> .
+@prefix kb: <http://example.org/kb/vocab#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+# Group Meeting Example
+:timeline/2024/11/15/team-standup a kb:GroupMeeting ;
+    kb:filePath "timeline/2024/11/15/team-standup.md" ;
+    dcterms:title "Team Standup" ;
+    dcterms:created "2024-11-15T09:00:00"^^xsd:dateTime ;
+    kb:documentType "group-meeting" ;
+    kb:hasTag :tag/meetings/standup ,
+              :tag/projects/web ;
+    kb:hasSection :timeline/2024/11/15/team-standup#Attendees ,
+                  :timeline/2024/11/15/team-standup#Updates ,
+                  :timeline/2024/11/15/team-standup#Action_Items .
+
+# Attendees section
+:timeline/2024/11/15/team-standup#Attendees a kb:Section ;
+    kb:heading "Attendees" ;
+    kb:headingLevel 2 ;
+    kb:contains :timeline/2024/11/15/team-standup#Attendees/link/John_Smith ,
+                :timeline/2024/11/15/team-standup#Attendees/link/Sarah_Chen ,
+                :timeline/2024/11/15/team-standup#Attendees/link/Mike_Johnson .
+
+# Inferred attendees (in :inferred graph)
+# :timeline/2024/11/15/team-standup 
+#     kb:hasAttendee :person/John_Smith ,
+#                    :person/Sarah_Chen ,
+#                    :person/Mike_Johnson .
+
+# Updates section with speaker context
+:timeline/2024/11/15/team-standup#Updates a kb:Section ;
+    kb:heading "Updates" ;
+    kb:contains :timeline/2024/11/15/team-standup#Updates/link/Sarah_Chen_1 .
+
+:timeline/2024/11/15/team-standup#Updates/link/Sarah_Chen_1 a kb:WikiLink ;
+    kb:target :person/Sarah_Chen ;
+    kb:linkText "[[Sarah Chen]]" ;
+    kb:surroundingText "[[Sarah Chen]] completed the authentication module" .
