@@ -1,0 +1,50 @@
+# Todo-related SPARQL queries
+
+PREFIX kb: <http://example.org/kb/vocab#>
+PREFIX dcterms: <http://purl.org/dc/terms/>
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+
+# 1. All open todos
+SELECT ?todo ?text WHERE {
+    ?todo a kb:TodoItem ;
+          kb:rawText ?text ;
+          kb:isCompleted false .
+}
+
+# 2. Todos with due dates
+SELECT ?todo ?text ?due WHERE {
+    GRAPH :inferred {
+        ?todo a kb:Todo ;
+              kb:description ?text ;
+              kb:due ?due .
+    }
+} ORDER BY ?due
+
+# 3. Overdue todos
+SELECT ?todo ?text ?due ?assigned WHERE {
+    GRAPH :inferred {
+        ?todo a kb:Todo ;
+              kb:description ?text ;
+              kb:due ?due ;
+              kb:assignedTo ?assigned .
+        FILTER(?due < NOW())
+    }
+}
+
+# 4. Todos by person
+SELECT ?person (COUNT(?todo) as ?count) WHERE {
+    GRAPH :inferred {
+        ?todo a kb:Todo ;
+              kb:assignedTo ?person .
+    }
+} GROUP BY ?person ORDER BY DESC(?count)
+
+# 5. Todos from specific meeting
+SELECT ?todo ?text WHERE {
+    ?todo kb:derivedFrom ?source .
+    ?source a kb:TodoItem ;
+            kb:rawText ?text .
+    ?section kb:contains ?source .
+    ?meeting kb:hasSection ?section .
+    FILTER(?meeting = :timeline/2024/11/15/team-standup)
+}
