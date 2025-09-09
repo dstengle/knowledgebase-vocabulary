@@ -267,6 +267,22 @@ kb:description a owl:DatatypeProperty ;
     rdfs:comment "Todo description text" .
 
 # ============================================
+# PERSON PROPERTIES (FOAF subproperties)
+# ============================================
+
+kb:mbox rdfs:subPropertyOf foaf:mbox ;
+    rdfs:domain kb:Person ;
+    rdfs:comment "Email address of the person" .
+
+kb:givenName rdfs:subPropertyOf foaf:givenName ;
+    rdfs:domain kb:Person ;
+    rdfs:comment "Given name of the person" .
+
+kb:familyName rdfs:subPropertyOf foaf:familyName ;
+    rdfs:domain kb:Person ;
+    rdfs:comment "Family name of the person" .
+
+# ============================================
 # ENTITY PROPERTIES
 # ============================================
 
